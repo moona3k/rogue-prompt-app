@@ -9,6 +9,7 @@ export default function Home() {
   const [roguePrompt, setRoguePrompt] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e) => {
@@ -35,7 +36,11 @@ export default function Home() {
     try {
       await navigator.clipboard.writeText(roguePrompt);
       setIsCopied(true);
-      setTimeout(() => setIsCopied(false), 2000);
+      setShowTooltip(true);
+      setTimeout(() => {
+        setIsCopied(false);
+        setShowTooltip(false);
+      }, 2000);
     } catch (err) {
       console.error('Failed to copy text: ', err);
     }
@@ -79,13 +84,20 @@ export default function Home() {
           <div className="mt-8 p-6 bg-gray-800 rounded-lg shadow-lg border border-gray-700 relative">
             <h2 className="text-xl font-semibold mb-4 text-blue-400">Alchemized Prompt:</h2>
             <p className="text-gray-300 whitespace-pre-wrap pr-10">{roguePrompt}</p>
-            <button
-              onClick={copyToClipboard}
-              className="absolute top-4 right-4 p-2 bg-gray-700 hover:bg-gray-600 rounded-full transition duration-300"
-              title="Copy to clipboard"
-            >
-              {isCopied ? <Check size={20} className="text-green-400" /> : <Copy size={20} />}
-            </button>
+            <div className="absolute top-4 right-4">
+              <button
+                onClick={copyToClipboard}
+                className="p-2 bg-gray-700 hover:bg-gray-600 rounded-full transition duration-300 relative"
+                title="Copy to clipboard"
+              >
+                {isCopied ? <Check size={20} className="text-green-400" /> : <Copy size={20} />}
+              </button>
+              {showTooltip && (
+                <div className="absolute right-0 mt-2 py-1 px-2 bg-green-500 text-white text-xs rounded shadow-lg">
+                  Copied!
+                </div>
+              )}
+            </div>
           </div>
         )}
       </main>
