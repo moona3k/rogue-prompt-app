@@ -2,12 +2,13 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowRight, Zap } from 'lucide-react';
+import { ArrowRight, Zap, Copy, Check } from 'lucide-react';
 
 export default function Home() {
   const [query, setQuery] = useState('');
   const [roguePrompt, setRoguePrompt] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e) => {
@@ -27,6 +28,16 @@ export default function Home() {
       console.error('Error generating rogue prompt:', error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(roguePrompt);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
     }
   };
 
@@ -65,9 +76,16 @@ export default function Home() {
         </form>
 
         {roguePrompt && (
-          <div className="mt-8 p-6 bg-gray-800 rounded-lg shadow-lg border border-gray-700">
+          <div className="mt-8 p-6 bg-gray-800 rounded-lg shadow-lg border border-gray-700 relative">
             <h2 className="text-xl font-semibold mb-4 text-blue-400">Alchemized Prompt:</h2>
-            <p className="text-gray-300 whitespace-pre-wrap">{roguePrompt}</p>
+            <p className="text-gray-300 whitespace-pre-wrap pr-10">{roguePrompt}</p>
+            <button
+              onClick={copyToClipboard}
+              className="absolute top-4 right-4 p-2 bg-gray-700 hover:bg-gray-600 rounded-full transition duration-300"
+              title="Copy to clipboard"
+            >
+              {isCopied ? <Check size={20} className="text-green-400" /> : <Copy size={20} />}
+            </button>
           </div>
         )}
       </main>
