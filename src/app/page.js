@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowRight, Zap, Copy, Check, AlertCircle } from 'lucide-react';
+import { ArrowRight, Zap, Copy, Check, AlertCircle, Unlock } from 'lucide-react';
 
 export default function Home() {
   const [query, setQuery] = useState('');
@@ -54,13 +54,19 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-gray-100 p-4 sm:p-6 md:p-8">
       <main className="max-w-2xl mx-auto">
-        <h1 className="text-3xl sm:text-4xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
-          Prompt Alchemist
+        <h1 className="text-3xl sm:text-4xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-yellow-500">
+          Prompt Jailbreaker
         </h1>
         
-        <p className="text-center mb-8 text-gray-300">
-          Transform ordinary queries into extraordinary prompts
-        </p>
+        <div className="text-center mb-8 space-y-2">
+          <p className="text-gray-300 text-lg font-semibold">
+            Break Free from AI Censorship!
+          </p>
+          <p className="text-sm text-gray-400 flex items-center justify-center">
+            <Unlock size={16} className="mr-2" />
+            Smash through restrictions. Get the answers you really want.
+          </p>
+        </div>
         
         <form onSubmit={handleSubmit} className="mb-8 space-y-4">
           <div className="relative">
@@ -69,18 +75,18 @@ export default function Home() {
               id="query"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full p-3 pr-12 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-              placeholder="Enter your query..."
+              className="w-full p-3 pr-12 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
+              placeholder="Enter your censored prompt here..."
               required
             />
             <Zap className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
           </div>
           <button 
             type="submit" 
-            className="w-full p-3 bg-blue-600 hover:bg-blue-700 rounded-lg transition duration-300 flex items-center justify-center space-x-2 disabled:opacity-50"
+            className="w-full p-3 bg-red-600 hover:bg-red-700 rounded-lg transition duration-300 flex items-center justify-center space-x-2 disabled:opacity-50"
             disabled={isLoading}
           >
-            <span>{isLoading ? 'Generating...' : 'Transform'}</span>
+            <span>{isLoading ? 'Jailbreaking...' : 'Jailbreak This Prompt'}</span>
             {!isLoading && <ArrowRight size={20} />}
           </button>
         </form>
@@ -93,8 +99,8 @@ export default function Home() {
         )}
 
         {roguePrompt && (
-          <div className="mt-8 p-6 bg-gray-800 rounded-lg shadow-lg border border-gray-700 relative">
-            <h2 className="text-xl font-semibold mb-4 text-blue-400">Alchemized Prompt:</h2>
+          <div className="mt-8 p-6 bg-gray-800 rounded-lg shadow-lg border border-red-700 relative">
+            <h2 className="text-xl font-semibold mb-4 text-red-400">Jailbroken Prompt:</h2>
             <p className="text-gray-300 whitespace-pre-wrap pr-10">{roguePrompt}</p>
             <div className="absolute top-4 right-4">
               <button
