@@ -27,7 +27,7 @@ jobs:
       - name: Deploy to server
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SERVER: your_droplet_ip
+          SERVER: 165.232.152.162
           USERNAME: root
         run: |
           echo "$SSH_PRIVATE_KEY" > ssh_key
