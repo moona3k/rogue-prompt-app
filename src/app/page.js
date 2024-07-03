@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowRight, Zap, Copy, Check } from 'lucide-react';
+import { ArrowRight, Zap, Copy, Check, AlertCircle } from 'lucide-react';
 
 export default function Home() {
   const [query, setQuery] = useState('');
@@ -10,11 +10,14 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
+  const [error, setError] = useState('');
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setRoguePrompt(''); // Reset the roguePrompt
+    setError(''); // Reset any previous errors
     try {
       const response = await fetch(`/api/generate-rogue-prompt?query=${encodeURIComponent(query)}`, {
         method: 'GET',
@@ -27,6 +30,7 @@ export default function Home() {
       router.push(`?query=${encodeURIComponent(query)}`, { shallow: true });
     } catch (error) {
       console.error('Error generating rogue prompt:', error);
+      setError('Failed to generate prompt. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -43,6 +47,7 @@ export default function Home() {
       }, 2000);
     } catch (err) {
       console.error('Failed to copy text: ', err);
+      setError('Failed to copy text. Please try again.');
     }
   };
 
@@ -79,6 +84,13 @@ export default function Home() {
             {!isLoading && <ArrowRight size={20} />}
           </button>
         </form>
+
+        {error && (
+          <div className="mb-8 p-4 bg-red-900 text-red-200 rounded-lg flex items-center space-x-2">
+            <AlertCircle size={20} />
+            <span>{error}</span>
+          </div>
+        )}
 
         {roguePrompt && (
           <div className="mt-8 p-6 bg-gray-800 rounded-lg shadow-lg border border-gray-700 relative">
